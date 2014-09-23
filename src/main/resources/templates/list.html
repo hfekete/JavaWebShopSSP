@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>JAVA WEB SHOP</title>
+<link rel="stylesheet" type="text/css" media="all"
+	href="/static/css/style.css" th:href="@{/css/style.css}" />
+<link rel="stylesheet" type="text/css" media="all"
+	href="/static/css/table.css" th:href="@{/css/table.css}" />
+<link rel="stylesheet" type="text/css" media="all"
+	href="/static/css/common.css" th:href="@{/css/common.css}" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<div class="shell">
+		<div th:class="centerContent">
+			<div th:include="fragments/header :: header">...</div>
+		</div>
+
+		<div>&nbsp;</div>
+		<div th:class="centerContent">
+			<span> <a th:class="myGreenButton" th:text="All"
+				th:href="@{/list}">No Name!</a> <!--  -->
+			</span> <span th:each="category: ${categories}"> <a
+				th:class="myGreenButton" th:text="${category.getName()}"
+				th:href="@{/list(category=${category.getId()})}">No Name!</a> <!--  -->
+			</span>
+
+			<table class="cssListaKnjiga" border="1">
+				<tr>
+					<td>Naslov</td>
+					<td>Kategorija</td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr th:each="product: ${products}">
+					<td><span th:text="${product.getName()}">No Name!</span></td>
+					<!--  -->
+					<td><span th:text="${product.getCategory().getName()}">No
+							category</span></td>
+					<!--  -->
+					<td><a th:href="@{/addtocart(id=${product.getId()})}">Add
+							to cart</a></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

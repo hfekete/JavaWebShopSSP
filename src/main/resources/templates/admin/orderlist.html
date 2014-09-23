@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<title>JAVA WEB SHOP</title>
+<link rel="stylesheet" type="text/css" media="all"
+	href="/static/css/style.css" th:href="@{/css/style.css}" />
+<link rel="stylesheet" type="text/css" media="all"
+	href="/static/css/table.css" th:href="@{/css/table.css}" />
+<link rel="stylesheet" type="text/css" media="all"
+	href="/static/css/common.css" th:href="@{/css/common.css}" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+
+<body>
+	<div class="shell">
+
+		<div th:class="centerContent">
+			<div th:include="fragments/header :: header">...</div>
+		</div>
+		<div>&nbsp;</div>
+		<div th:class="centerContent">
+			<table class="cssListaKnjiga">
+				<tr>
+					<td>Datum narudžbe</td>
+					<td>Artikli</td>
+					<td>Korisnik</td>
+				</tr>
+				<tr th:each="order: ${orders}">
+					<td><span th:text="${order.getDateAsString()}">No Name!</span></td>
+					<!--  -->
+					<td>
+
+						<div style="width: 60%; font-weight: bold; font-size: 13px">
+							<div style="width: 150px; display: inline-block;">Naziv
+								knjige</div>
+							<!--  -->
+							<div style="width: 40px; display: inline-block;">Količina</div>
+						</div>
+						<div th:each="product: ${order.getProductsInOrder()}"
+							style="width: 60%">
+							<div th:text="${product.getName()}"
+								style="width: 150px; display: inline-block;"></div>
+							<!--  -->
+							<div th:text="${order.getProducts().get(product)}"
+								style="width: 40px; display: inline-block;"></div>
+						</div>
+
+					</td>
+					<td><span th:text="${order.getOwner().getUsername()}">...</span></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>JAVA WEB SHOP</title>
+<link rel="stylesheet" type="text/css" media="all"
+	href="/static/css/style.css" th:href="@{/css/style.css}" />
+<link rel="stylesheet" type="text/css" media="all"
+	href="/static/css/table.css" th:href="@{/css/table.css}" />
+<link rel="stylesheet" type="text/css" media="all"
+	href="/static/css/common.css" th:href="@{/css/common.css}" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<div class="shell">
+		<div th:class="centerContent">
+			<div th:include="fragments/header :: header">...</div>
+		</div>
+		<br />
+		<h1>Dogodila se greska. Error !</h1>
+
+		<br />
+		<div th:switch="${errorCode}">
+			<p th:case="404">Page not found</p>
+			<p th:case="405">Not authorized</p>
+			<p th:case="*">Other error</p>
+		</div>
+	</div>
+</body>
+</html>

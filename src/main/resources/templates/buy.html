@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>JAVA WEB SHOP</title>
+<link rel="stylesheet" type="text/css" media="all"
+	href="/static/css/style.css" th:href="@{/css/style.css}" />
+<link rel="stylesheet" type="text/css" media="all"
+	href="/static/css/table.css" th:href="@{/css/table.css}" />
+<link rel="stylesheet" type="text/css" media="all"
+	href="/static/css/common.css" th:href="@{/css/common.css}" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<div class="shell">
+		<div th:class="centerContent">
+			<div th:include="fragments/header :: header">...</div>
+		</div>
+
+		<p>
+			Odlicno, cestitamo kupili ste knjige u iznosu od: <span
+				th:text="${cart.getTotalPrice()}">--</span>
+		</p>
+
+	</div>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>JAVA WEB SHOP</title>
+<link rel="stylesheet" type="text/css" media="all"
+	href="/static/css/style.css" th:href="@{/css/style.css}" />
+<link rel="stylesheet" type="text/css" media="all"
+	href="/static/css/table.css" th:href="@{/css/table.css}" />
+<link rel="stylesheet" type="text/css" media="all"
+	href="/static/css/common.css" th:href="@{/css/common.css}" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+
+	<div class="shell">
+
+
+		<div class="title">
+			<h2>Cart</h2>
+		</div>
+		<div th:replace="fragments/header :: header (doNotDisplayCart='true')">...</div>
+		<br />
+		<form th:action="@{/updatecart}" method="post">
+			<table class="cssListaKnjiga">
+				<tr>
+					<td>Naslov</td>
+					<td>Kategorija</td>
+					<td>Amount</td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr th:each="product: ${cart.getProductSet()}">
+					<td><span th:text="${product.getName()}">No Name!</span></td>
+					<!--  -->
+					<td><span th:text="${product.getCategory().getName()}">No
+							category</span></td>
+					<!--  -->
+					<td><input th:name="${'book_id'+product.getId()}"
+						th:id="${'book_id'+product.getId()}"
+						th:value="${cart.getAmountOfProd(product)}" /></td>
+					<td><input type="submit" value="Osvjezi vrijednosti kosarice" /></td>
+				</tr>
+				<tr>
+					<td colspan="4">
+						<div class="submit-container">
+							<a class="submit-button" href="/checkout">Checkout</a>
+						</div>
+					</td>
+
+				</tr>
+			</table>
+		</form>
+
+
+
+	</div>
+</body>
+</html>

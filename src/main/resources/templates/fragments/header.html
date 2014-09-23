@@ -1,0 +1,57 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<body>
+
+	<div th:fragment="header">
+		<div th:class="buttonDiv">
+			<!-- CART BUTTON -->
+			<a th:class="myButton" th:unless="${doNotDisplayCart}=='true'"
+				th:href="@{/cart}">Cart</a>
+		</div>
+		<!-- HOME BUTTON -->
+		<div th:class="buttonDiv">
+			<a th:class="myButton" th:href="@{/}">Home</a>
+		</div>
+		
+		<!-- USER ORDER LIST BUTTON -->
+		<div th:class="buttonDiv" th:if="${#httpServletRequest.remoteUser!=null}">
+			<a th:class="myButton" th:href="@{/user}">Moje kupnje</a>
+		</div>
+		
+		<!-- ADMIN ALL USERS ORDER LIST BUTTON -->
+		<div class="buttonDiv" th:if='${#httpServletRequest.isUserInRole("ADMIN")}'>
+			<a th:class="myButton" th:href="@{/admin/orders}">Lista kupnji svih korisnika</a>
+		</div>
+		<div class="buttonDiv" th:if='${#httpServletRequest.isUserInRole("ADMIN")}'>
+			<a th:class="myButton" th:href="@{/admin/logins}">Lista prijava svih korisnika</a>
+		</div>
+		
+		
+		<!--  LOGIN BUTTON -->
+		<div class="buttonDiv" th:if="${#httpServletRequest.remoteUser==null}">
+			<!--  -->
+			<a th:class="myButton" th:href="@{/login}">Login</a>
+		</div>
+		
+		<!--  LOGOUT BUTTON -->
+		<div class="buttonDiv" th:if="${#httpServletRequest.remoteUser!=null}">
+			<!--  -->
+			<form name="logoutForm" id="logoutForm" th:action="@{/logout}"
+				method="post">
+				<a th:class="myButton" href="javascript: submitform()">Logout</a>
+			</form>
+			<script type="text/javascript">
+				function submitform() {
+					document.logoutForm.submit();
+				}
+			</script>
+		</div>
+	</div>
+
+</body>
+
+</html>
