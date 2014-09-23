@@ -20,7 +20,7 @@
 		</div>
 		<div th:replace="fragments/header :: header (doNotDisplayCart='true')">...</div>
 		<br />
-		<form th:action="@{/updatecart}" method="post">
+		<form id="cart" name="cart" th:action="@{/updatecart}" method="post">
 			<table class="cssListaKnjiga">
 				<tr>
 					<td>Naslov</td>
@@ -37,8 +37,21 @@
 					<td><input th:name="${'book_id'+product.getId()}"
 						th:id="${'book_id'+product.getId()}"
 						th:value="${cart.getAmountOfProd(product)}" /></td>
-					<td><input type="submit" value="Osvjezi vrijednosti kosarice" /></td>
-				</tr>
+					<td><script type="text/javascript">
+						function submitForm()
+						{
+							document.cart.submit();
+							return true;
+						}
+					</script> <!--  -->
+						<div class="submit-container">
+							<!--  -->
+							<a class="submit-button" href="javascript:submitForm();">Osvjezi
+								vrijednosti kosarice</a>
+							<!--  -->
+							<a class="submit-button-red" type="button" th:href="${'/cart?remove='+product.getId()}"> Ukloni iz kosarice</a>
+						</div></td>
+	 				</tr>
 				<tr>
 					<td colspan="4">
 						<div class="submit-container">

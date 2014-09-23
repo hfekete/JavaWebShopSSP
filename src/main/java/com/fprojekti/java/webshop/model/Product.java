@@ -28,7 +28,7 @@ public class Product {
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(17, 31).append(id + "name").toHashCode();
+		return new HashCodeBuilder(17, 31).append(id).toHashCode();
 	}
 
 	@Override
