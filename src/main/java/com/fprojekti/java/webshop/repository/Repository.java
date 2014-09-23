@@ -14,6 +14,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
 import com.fprojekti.java.webshop.model.Category;
+import com.fprojekti.java.webshop.model.LoginData;
 import com.fprojekti.java.webshop.model.Order;
 import com.fprojekti.java.webshop.model.Product;
 import com.fprojekti.java.webshop.model.User;
@@ -28,7 +29,7 @@ public class Repository {
 	private static final String TABLE_PRODUCT = "product";
 	private static final String TABLE_ORDER = "consumer_order";
 	private static final String TABLE_ORDER_PRODUCT_AMOUNT = "order_product_amount";
-	private static final String TABLE_LOGINS = "logins";
+	private static final String TABLE_LOGIN = "login";
 
 	// COMMON
 	private static final String TABLE_ROW_ID = "id";
@@ -45,11 +46,12 @@ public class Repository {
 	private static final String TABLE_ORDER_PROD_LIST_ID = "products_in_order_id";
 	private static final String TABLE_ORDER_DATETIME = "order_date";
 	private static final String TABLE_ORDER_NACIN_PLACANJA = "payment_type";
-	
-	//logins table column names
-	private static final String TABLE_LOGINS_DATE = "datum_prijave";
-	private static final String TABLE_LOGINS_USERNAME = "username";
-	
+
+	// logins table column names
+	private static final String TABLE_LOGIN_DATE = "date_login";
+	private static final String TABLE_LOGIN_USERNAME = "username";
+	private static final String TABLE_LOGIN_IP_ADDR = "ip_addr";
+
 	/**************************************************************************************************************/
 	// / / create and insert commands
 	private static final String CREATE_TABLE_PRODUCT = "CREATE TABLE " + TABLE_PRODUCT
@@ -71,6 +73,11 @@ public class Repository {
 	private static final String INSERT_INTO_ORDER_PRODUCT_AMOUNT = "INSERT INTO " + TABLE_ORDER_PRODUCT_AMOUNT
 			+ "(product_id, order_id, prod_amount) values(?,?,?)";
 
+	private static final String CREATE_TABLE_LOGIN = "CREATE TABLE " + TABLE_LOGIN
+			+ " (id serial, username varchar(50), date_login datetime, " + TABLE_LOGIN_IP_ADDR + " varchar(50));";
+	private static final String INSERT_INTO_LOGIN = "INSERT INTO " + TABLE_LOGIN + "(username, date_login, "
+			+ TABLE_LOGIN_IP_ADDR + ") values(?,?,?)";
+
 	static {
 		// simple DS for test (not for production!)
 		SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
@@ -81,20 +88,15 @@ public class Repository {
 
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
-		System.out.println("Creating tables");
-		// products table
-		jdbcTemplate.execute("drop table " + TABLE_PRODUCT + " if exists");
-		jdbcTemplate.execute(CREATE_TABLE_PRODUCT);
-		// category table
-		jdbcTemplate.execute("drop table " + TABLE_CATEGORY + " if exists");
-		jdbcTemplate.execute(CREATE_TABLE_CATEGORY);
-		// order table
-		jdbcTemplate.execute("drop table " + TABLE_ORDER + " if exists");
-		jdbcTemplate.execute(CREATE_TABLE_ORDER);
-		// order product amount table
-		jdbcTemplate.execute("drop table " + TABLE_ORDER_PRODUCT_AMOUNT + " if exists");
-		jdbcTemplate.execute(CREATE_TABLE_ORDER_PRODUCT_AMOUNT);
+		createTables(jdbcTemplate);
 
+		insertData(jdbcTemplate);
+
+		jdbcForWebShop = jdbcTemplate;
+		System.out.println("Repository ... Init Done !");
+	}
+
+	private static void insertData(JdbcTemplate jdbcTemplate) {
 		// insert basic data
 		System.out.printf("Inserting product records ");
 		jdbcTemplate.update(INSERT_INTO_CATEGORY, "scifi");
@@ -109,9 +111,25 @@ public class Repository {
 		jdbcTemplate.update(INSERT_INTO_PRODUCTS, 2, "Legende o drizztu 2", 5.2);
 		jdbcTemplate.update(INSERT_INTO_PRODUCTS, 2, "Legende o drizztu 3", 6.2);
 		jdbcTemplate.update(INSERT_INTO_PRODUCTS, 2, "egende o drizztu 4", 12.2);
+	}
 
-		jdbcForWebShop = jdbcTemplate;
-		System.out.println("Repository ... Init Done !");
+	private static void createTables(JdbcTemplate jdbcTemplate) {
+		System.out.println("Creating tables");
+		// products table
+		jdbcTemplate.execute("drop table " + TABLE_PRODUCT + " if exists");
+		jdbcTemplate.execute(CREATE_TABLE_PRODUCT);
+		// category table
+		jdbcTemplate.execute("drop table " + TABLE_CATEGORY + " if exists");
+		jdbcTemplate.execute(CREATE_TABLE_CATEGORY);
+		// order table
+		jdbcTemplate.execute("drop table " + TABLE_ORDER + " if exists");
+		jdbcTemplate.execute(CREATE_TABLE_ORDER);
+		// order product amount table
+		jdbcTemplate.execute("drop table " + TABLE_ORDER_PRODUCT_AMOUNT + " if exists");
+		jdbcTemplate.execute(CREATE_TABLE_ORDER_PRODUCT_AMOUNT);
+
+		jdbcTemplate.execute("drop table " + TABLE_LOGIN + " if exists");
+		jdbcTemplate.execute(CREATE_TABLE_LOGIN);
 	}
 
 	private static final JdbcTemplate jdbcForWebShop;
@@ -246,5 +264,30 @@ public class Repository {
 			}
 		});
 		return results;
+	}
+
+	private static List<LoginData> _logins = _getAllLogins();
+
+	public static List<LoginData> getAllLogins() {
+		return _logins;
+	}
+
+	private static List<LoginData> _getAllLogins() {
+
+		List<LoginData> results = jdbcForWebShop.query("select * from " + TABLE_LOGIN, new RowMapper<LoginData>() {
+			@Override
+			public LoginData mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return new LoginData(rs.getLong(TABLE_ROW_ID), rs.getString(TABLE_LOGIN_USERNAME), rs
+						.getDate(TABLE_LOGIN_DATE), rs.getString(TABLE_LOGIN_IP_ADDR));
+			}
+		});
+		return results;
+
+	}
+
+	public static void userLoggedIn(String username, String ip_addr) {
+		// kreiraj order u order tablici
+		jdbcForWebShop.update(INSERT_INTO_LOGIN, username, Calendar.getInstance().getTime(), ip_addr);
+		_logins = _getAllLogins();
 	}
 }

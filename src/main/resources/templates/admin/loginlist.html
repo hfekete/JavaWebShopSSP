@@ -24,12 +24,15 @@
 				<tr>
 					<td>Datum prijave</td>
 					<td>Korisnik</td>
+					<td>Adresa</td>
 				</tr>
 
-				<tr th:each="prijava: ${prijave}">
+				<tr th:each="prijava: ${logins}">
 					<td><span th:text="${prijava.getDateAsString()}">...</span></td>
 					<!--  -->
-					<td><span th:text="${prijava.getUser()}">...</span></td>
+					<td><span th:text="${prijava.getUsername()}">...</span></td>
+					<!--  -->
+					<td><span th:text="${prijava.getIpAddr()}">...</span></td>
 				</tr>
 			</table>
 		</div>

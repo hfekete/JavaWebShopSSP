@@ -7,6 +7,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 
+import com.fprojekti.java.webshop.security.LoginSucessHandler;
+
 @Configuration
 @EnableWebMvcSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -27,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.anyRequest().authenticated();
 
 		http.formLogin().loginPage("/login").permitAll().and().logout().permitAll();
-
+		http.formLogin().successHandler(new LoginSucessHandler());
 	}
 
 	@Configuration

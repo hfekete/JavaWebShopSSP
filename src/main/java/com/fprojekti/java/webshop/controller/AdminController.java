@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.fprojekti.java.webshop.manager.OrderManager;
+import com.fprojekti.java.webshop.repository.Repository;
 
 @Controller
 public class AdminController {
@@ -25,9 +26,7 @@ public class AdminController {
 
 	@RequestMapping("/admin/logins")
 	public String listLogins(HttpServletRequest request, HttpSession session, Model model) {
-
-		// TODO: add login list
-
+		model.addAttribute("logins", Repository.getAllLogins());
 		return "admin/loginlist";
 	}
 

@@ -23,11 +23,11 @@
 		</div>
 		
 		<!-- ADMIN ALL USERS ORDER LIST BUTTON -->
-		<div class="buttonDiv" th:if='${#httpServletRequest.isUserInRole("ADMIN")}'>
-			<a th:class="myButton" th:href="@{/admin/orders}">Lista kupnji svih korisnika</a>
+		<div class="buttonDiv" th:if='${#httpServletRequest.isUserInRole("ROLE_ADMIN")}'>
+			<a th:class="myButton" th:href="@{/admin/orders}">Sve Kupnje</a>
 		</div>
-		<div class="buttonDiv" th:if='${#httpServletRequest.isUserInRole("ADMIN")}'>
-			<a th:class="myButton" th:href="@{/admin/logins}">Lista prijava svih korisnika</a>
+		<div class="buttonDiv" th:if='${#httpServletRequest.isUserInRole("ROLE_ADMIN")}'>
+			<a th:class="myButton" th:href="@{/admin/logins}">Lista prijava</a>
 		</div>
 		
 		
